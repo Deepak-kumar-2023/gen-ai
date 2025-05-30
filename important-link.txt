@@ -1,0 +1,7 @@
+https://github.com/jujumilk3/leaked-system-prompts
+
+https://github.com/stackblitz/bolt.new/blob/main/app/lib/.server/llm/prompts.ts
+
+https://github.com/sharkqwy/v0prompt/blob/main/prompt.txt
+
+
