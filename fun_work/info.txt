@@ -1,0 +1,12 @@
+hello hitesh sir and piyush.
+
+welcome in the video 
+
+this is the demonstration of the project 
+
+name of the project is mini-curser
+
+lets start 
+
+my AI can create todo app in react and streamlit.
+
