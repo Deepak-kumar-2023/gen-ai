@@ -1,15 +1,16 @@
 from dotenv import load_dotenv
 from langchain_qdrant import QdrantVectorStore
-
+import os
+from pathlib import Path
 # from langchain.embeddings import AzureOpenAIEmbeddings
 from openai import AzureOpenAI
 from langchain_openai import AzureOpenAIEmbeddings
 
 load_dotenv()
 client = AzureOpenAI(
-  azure_endpoint = "https://kumar-mb9bwws6-eastus2.cognitiveservices.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2025-01-01-preview", 
-  api_key="C0ULhb69e4XM8DLntR0FtT9ADsXTaoHGYKRfP3Nnpx2QwfmpppaZJQQJ99BEACHYHv6XJ3w3AAAAACOGHhej",  
-  api_version="2025-01-01-preview"
+        azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT_4o"), 
+        api_key= os.getenv("AZURE_OPENAI_API_KEY_4o"),  
+        api_version= os.getenv("AZURE_OPENAI_API_VERSION_4o")
 )
 
 # Vector Embeddings
@@ -22,44 +23,6 @@ vector_db = QdrantVectorStore.from_existing_collection(
     collection_name="learning_vectors",
     embedding=embedding_model
 )
-
-# messages = []
-
-# # Take User Query
-# while True:
-#     query = input("> ")
-
-# # Vector Similarity Search [query] in DB
-#     search_results = vector_db.similarity_search(
-#     query=query
-#     )
-
-#     context = "\n\n\n".join([f"Page Content: {result.page_content}\nPage Number: {result.metadata['page_label']}\nFile Location: {result.metadata['source']}" for result in search_results])
-
-#     SYSTEM_PROMPT = f"""
-#     You are a helpfull AI Assistant who asnweres user query based on the available context
-#     retrieved from a PDF file along with page_contents and page number.
-
-#     You should only ans the user based on the following context and navigate the user
-#     to open the right page number to know more.
-
-#     Context:
-#     {context}
-#     """
-
-#     messages.append(
-#     { "role": "system", "content": SYSTEM_PROMPT }
-#     )
-
-#     chat_completion = client.chat.completions.create(
-#         model="gpt-4o-mini",
-#         messages=[
-#             { "role": "system", "content": SYSTEM_PROMPT },
-#             { "role": "user", "content": query },
-#         ]
-#     )
-
-#     print(f"🤖: {chat_completion.choices[0].message.content}")
 
 
 # Step 0: Create message history with a single system prompt
