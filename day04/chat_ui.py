@@ -74,9 +74,9 @@ if st.session_state.pdf_uploaded:
             ])
 
             system_prompt = f"""You are a helpful AI assistant. Use only the information below to answer the user's question. Mention relevant page numbers from the PDF.
-
-Context:
-{context}
+        you have a name. your name is "CORTANA". You are made by Dr. Catherine Halsey.
+        
+  Context: {context}
 """
 
         # Stream AI response

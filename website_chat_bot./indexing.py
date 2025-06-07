@@ -6,39 +6,33 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from langchain_qdrant import QdrantVectorStore
 from langchain_community.vectorstores import InMemoryVectorStore
+from langchain_community.vectorstores import FAISS
+from langchain_community.document_loaders import WebBaseLoader
 load_dotenv()
 
-pdf_path = Path(__file__).parent / "study.pdf"
 
-# Loading
-loader = PyPDFLoader(file_path=pdf_path)
-docs = loader.load() # Read PDF File
-
-# Chunking
-text_splitter = RecursiveCharacterTextSplitter(
-    chunk_size=1024,  # Size of each chunk
-    chunk_overlap=400
+# Step 1: Load website content
+loader = WebBaseLoader(
+    "https://docs.chaicode.com/youtube/chai-aur-git/branches/",
 )
+docs = loader.load()
 
+# Step 2: Split content
+splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+chunks = splitter.split_documents(docs)
 
-
-split_docs = text_splitter.split_documents(documents=docs)
-
+# Step 3: Embed chunks
 embedding_model = AzureOpenAIEmbeddings(
     model="text-embedding-ada-002",
     
 )
 
-# Using [embedding_model] create embeddings of [split_docs] and store in DB
+vectorstore = FAISS.from_documents(chunks, embedding_model)
 
-vector_store = QdrantVectorStore.from_documents(
-    documents=split_docs,
-    url="http://localhost:6333",
-    collection_name="learning_vectors",
-    embedding=embedding_model
-)
-
-print("Indexing of Documents Done...")
+# Step 4: Search + Chat
+retriever = vectorstore.as_retriever()
+results = retriever.invoke("Tell me something about parrots.")
+print(results[0].page_content)
 
 
 
