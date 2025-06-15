@@ -93,7 +93,7 @@ function App() {
       const userMessage = { type: 'user', content: trimmedQuestion };
       setMessages(prev => [...prev, userMessage]);
       
-      const res = await axios.post("http://localhost:8000/ask", {
+      const res = await axios.post("http://localhost:7071/api/ask", {
         question: trimmedQuestion,
       }, {
         timeout: 60000,

@@ -15,7 +15,7 @@ from openai import AzureOpenAI
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
 from fastapi.middleware.cors import CORSMiddleware
-
+from fastapi import BackgroundTasks
 app = FastAPI()
 
 app.add_middleware(
@@ -116,14 +116,12 @@ def read_root():
 
 
 
-
-
-from fastapi import BackgroundTasks
-
 @app.post("/crawl")
 def crawl_website_api(request_data: CrawlRequest, background_tasks: BackgroundTasks):
     background_tasks.add_task(process_crawl_job, request_data)
     return {"message": "Crawling started in background!"}
+
+
 
 @app.post("/ask")
 def ask_question(request: QuestionRequest):
